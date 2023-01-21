@@ -36,12 +36,12 @@ const (
 	morseCodeZ       = "--.."
 )
 
-type graphNode struct {
+type morseCode struct {
 	letter string
 	weigth int
 }
 
-var morseDichotomicCodeMap = map[string]graphNode{
+var morseDichotomicCodeMap = map[string]morseCode{
 	morseCodeE: {letter: "E", weigth: 100}, morseCodeT: {letter: "T", weigth: 99}, morseCodeI: {letter: "I", weigth: 98},
 	morseCodeA: {letter: "A", weigth: 97}, morseCodeN: {letter: "N", weigth: 96}, morseCodeM: {letter: "M", weigth: 95},
 	morseCodeS: {letter: "S", weigth: 94}, morseCodeU: {letter: "U", weigth: 93}, morseCodeR: {letter: "R", weigth: 92},
@@ -86,7 +86,7 @@ func getKnownSignalsPositions(signals string) (map[int]string, bool) {
 }
 
 func getSignalsPossibilitiesWithInputLength(inputLength int) []string {
-	nodes := make([]graphNode, 0)
+	nodes := make([]morseCode, 0)
 	for morseCode, threeNode := range morseDichotomicCodeMap {
 		if len(morseCode) == inputLength {
 			nodes = append(nodes, threeNode)
@@ -97,7 +97,7 @@ func getSignalsPossibilitiesWithInputLength(inputLength int) []string {
 }
 
 func getSignalsPossibilitiesFromKnownSignalPosition(knownSignalsMap map[int]string, inputLength int) []string {
-	nodes := make([]graphNode, 0)
+	nodes := make([]morseCode, 0)
 	for morseKey, threeNode := range morseDichotomicCodeMap {
 		morseKeyArray := []rune(morseKey)
 		if hasAllSignalsInPlace(morseKeyArray, knownSignalsMap) && satisfyInputLength(morseKey, inputLength) {
@@ -126,7 +126,7 @@ func satisfyInputLength(morseKey string, limitedLength int) bool {
 	return len(morseKey) == limitedLength
 }
 
-func getOrderedPossibilities(node []graphNode) []string {
+func getOrderedPossibilities(node []morseCode) []string {
 	sort.Slice(node, func(i, j int) bool {
 		return node[i].weigth > node[j].weigth
 	})
